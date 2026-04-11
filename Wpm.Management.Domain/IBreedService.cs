@@ -17,8 +17,8 @@ namespace Wpm.Management.Domain
     {
         public readonly List<Breed> breeds =
             [
-                new Breed(Guid.NewGuid(), "Labrador Retriever", new WeightRange(55, 80), new WeightRange(55, 80)),
-                new Breed(Guid.NewGuid(), "German Shepherd", new WeightRange(50, 90), new WeightRange(50, 90)),
+                new Breed(Guid.NewGuid(), "Labrador Retriever", new WeightRange(10, 20), new WeightRange(55, 80)),
+                new Breed(Guid.NewGuid(), "German Shepherd", new WeightRange(28, 48), new WeightRange(50, 90)),
             ];
 
         public Breed? GetBreed(Guid id)

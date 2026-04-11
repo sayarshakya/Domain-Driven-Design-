@@ -19,5 +19,10 @@ namespace Wpm.Management.Domain.ValueObjects
 
             Value = value;
         }
+
+        public static implicit operator Weight(decimal value)
+        {
+            return new Weight(value);
+        }
     }
 }

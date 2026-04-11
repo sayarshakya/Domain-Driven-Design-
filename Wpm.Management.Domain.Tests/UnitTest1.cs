@@ -1,5 +1,6 @@
 using Wpm.Management.Domain.Entities;
 using Wpm.Management.Domain.ValueObjects;
+using static Wpm.Management.Domain.Entities.Pet;
 
 namespace Wpm.Management.Domain.Tests
 {
@@ -11,8 +12,8 @@ namespace Wpm.Management.Domain.Tests
             var id = Guid.NewGuid();
             var breedService = new FakeBreedService();
             var breedId = new BreedId(breedService.breeds[0].Id, breedService);
-            var pet1 = new Pet(id, "Ballu", 5, "Black", new Weight(20.5m), SexOfPet.Male, breedId);
-            var pet2 = new Pet(id, "Cherry", 12, "Black", new Weight(15.3m), SexOfPet.Female, breedId);
+            var pet1 = new Pet(id, "Ballu", 5, "Black", SexOfPet.Male, breedId);
+            var pet2 = new Pet(id, "Cherry", 12, "Black", SexOfPet.Female, breedId);
 
             Assert.True(pet1.Equals(pet2));
         }
@@ -23,8 +24,8 @@ namespace Wpm.Management.Domain.Tests
             var id = Guid.NewGuid();
             var breedService = new FakeBreedService();
             var breedId = new BreedId(breedService.breeds[0].Id, breedService);
-            var pet1 = new Pet(id, "Ballu", 5, "Black", new Weight(20.5m), SexOfPet.Male, breedId);
-            var pet2 = new Pet(id, "Cherry", 12, "Black", new Weight(15.3m), SexOfPet.Female, breedId);
+            var pet1 = new Pet(id, "Ballu", 5, "Black", SexOfPet.Male, breedId);
+            var pet2 = new Pet(id, "Cherry", 12, "Black", SexOfPet.Female, breedId);
 
             Assert.True(pet1 == pet2);
         }
@@ -36,8 +37,8 @@ namespace Wpm.Management.Domain.Tests
             var id2 = Guid.NewGuid();
             var breedService = new FakeBreedService();
             var breedId = new BreedId(breedService.breeds[0].Id, breedService);
-            var pet1 = new Pet(id1, "Ballu", 5, "Black", new Weight(20.5m), SexOfPet.Male, breedId);
-            var pet2 = new Pet(id2, "Cherry", 12, "Black", new Weight(15.3m), SexOfPet.Female, breedId);
+            var pet1 = new Pet(id1, "Ballu", 5, "Black", SexOfPet.Male, breedId);
+            var pet2 = new Pet(id2, "Cherry", 12, "Black", SexOfPet.Female, breedId);
 
             Assert.True(pet1 != pet2);
         }
@@ -74,10 +75,40 @@ namespace Wpm.Management.Domain.Tests
         {
             var breedService = new FakeBreedService();
             var id = Guid.NewGuid();
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
             {
-                var breedId = new BreedId(id, breedService);    
+                var breedId = new BreedId(id, breedService);
             });
+        }
+
+        [Fact]
+        public void WeightClass_Should_be_ideal()
+        {
+            var breedService = new FakeBreedService();
+            var breedId = new BreedId(breedService.breeds[0].Id, breedService);
+            var pet = new Pet(Guid.NewGuid(), "Ballu", 5, "Black", SexOfPet.Male, breedId);
+            pet.SetWeight((10), breedService);
+            Assert.True(pet.PetWeightClass == WeightClass.Ideal);
+        }
+
+        [Fact]
+        public void WeightClass_Should_be_underweight()
+        {
+            var breedService = new FakeBreedService();
+            var breedId = new BreedId(breedService.breeds[0].Id, breedService);
+            var pet = new Pet(Guid.NewGuid(), "Ballu", 5, "Black", SexOfPet.Male, breedId);
+            pet.SetWeight((8), breedService);
+            Assert.True(pet.PetWeightClass == WeightClass.Underweight);
+        }
+
+        [Fact]
+        public void WeightClass_Should_be_overweight()
+        {
+            var breedService = new FakeBreedService();
+            var breedId = new BreedId(breedService.breeds[0].Id, breedService);
+            var pet = new Pet(Guid.NewGuid(), "Ballu", 5, "Black", SexOfPet.Male, breedId);
+            pet.SetWeight((25), breedService);
+            Assert.True(pet.PetWeightClass == WeightClass.Overweight);
         }
     }
 }
