@@ -1,5 +1,6 @@
 using Wpm.Management.Domain.Entities;
 using Wpm.Management.Domain.ValueObjects;
+using Wpm.SharedKernel;
 using static Wpm.Management.Domain.Entities.Pet;
 
 namespace Wpm.Management.Domain.Tests
