@@ -10,7 +10,7 @@ namespace Wpm.Management.Domain.Entities
         public string Name { get; init; }
         public int Age { get; init; }
         public string Color { get; init; }
-        public Weight Weight { get; private set; }
+        public Weight? Weight { get; private set; }
         public WeightClass PetWeightClass { get; private set; }
         public SexOfPet PetSexOfPet { get; init; }
         public BreedId BreedId { get; init; }
@@ -20,14 +20,14 @@ namespace Wpm.Management.Domain.Entities
                    string name,
                    int age,
                    string color,
-                   SexOfPet sexOfPet,
+                   SexOfPet petSexOfPet,
                    BreedId breedId)
         {
             Id = id;
             Name = name;
             Age = age;
             Color = color;
-            PetSexOfPet = sexOfPet;
+            PetSexOfPet = petSexOfPet;
             BreedId = breedId;
         }
 
