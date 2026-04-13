@@ -14,5 +14,11 @@ namespace Wpm.Clinic.Domain
             DrugId = drugId;
             Dose = dose;
         }
+
+        public DrugAdministration()
+        {
+
+        }
     }
+    
 }

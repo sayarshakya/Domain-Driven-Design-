@@ -1,18 +1,19 @@
 ﻿using Wpm.Clinic.Domain.ValueObjects;
 using Wpm.SharedKernel;
 
-namespace Wpm.Clinic.Domain
+namespace Wpm.Clinic.Domain.Entities
 {
     public class Consultation : AggregateRoot
     {
         private readonly List<DrugAdministration> administeredDrugs = new();
         private readonly List<VitalSigns> vitalSignReadings = new();
+        public DateTimeRange When { get; private set; }
         public DateTime StartedAt { get; init; } 
         public DateTime? EndedAt { get; private set; }
-        public Text Diagnosis { get; private set; }
-        public Text Treatment { get; private set; }
+        public Text? Diagnosis { get; private set; }
+        public Text? Treatment { get; private set; }
         public PatiendId PatiendId { get; init; }
-        public Weight CurrentWeight { get; private set; }
+        public Weight? CurrentWeight { get; private set; }
         public ConsultationStatus Status { get; private set; }
         public IReadOnlyCollection<DrugAdministration> AdministeredDrugs => administeredDrugs;
         public IReadOnlyCollection<VitalSigns> VitalSignReadings => vitalSignReadings;
@@ -48,7 +49,7 @@ namespace Wpm.Clinic.Domain
             }
 
             Status = ConsultationStatus.Closed;
-            EndedAt = DateTime.UtcNow;
+            When = new DateTimeRange(When.StartedAt, DateTime.UtcNow);
         }
 
         public void SetWeight(Weight weight)

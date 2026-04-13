@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wpm.Clinic.Domain.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wpm.SharedKernel", "Wpm.SharedKernel\Wpm.SharedKernel.csproj", "{EDF032B1-DCCB-4F28-8A8A-D0173CAEEE2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wpm.Clinic.Api", "Wpm.Clinic.Api\Wpm.Clinic.Api.csproj", "{72406D9F-CE22-43DC-9889-A7486CBA0D6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{EDF032B1-DCCB-4F28-8A8A-D0173CAEEE2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDF032B1-DCCB-4F28-8A8A-D0173CAEEE2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDF032B1-DCCB-4F28-8A8A-D0173CAEEE2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72406D9F-CE22-43DC-9889-A7486CBA0D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72406D9F-CE22-43DC-9889-A7486CBA0D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72406D9F-CE22-43DC-9889-A7486CBA0D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72406D9F-CE22-43DC-9889-A7486CBA0D6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
