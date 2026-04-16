@@ -7,7 +7,7 @@
         {
         }
 
-        public Guid Id { get; init; }
+        public Guid Id { get; protected set; }
 
         public bool Equals(Entity? other)
         {

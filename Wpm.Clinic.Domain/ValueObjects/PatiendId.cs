@@ -16,5 +16,10 @@
         {
             return new PatiendId(value);
         }
+
+        public static implicit operator Guid(PatiendId value)
+        {
+            return value.Value;
+        }
     }
 }

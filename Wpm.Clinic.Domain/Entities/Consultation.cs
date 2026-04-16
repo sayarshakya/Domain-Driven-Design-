@@ -1,4 +1,5 @@
-﻿using Wpm.Clinic.Domain.ValueObjects;
+﻿using Wpm.Clinic.Domain.Events;
+using Wpm.Clinic.Domain.ValueObjects;
 using Wpm.SharedKernel;
 
 namespace Wpm.Clinic.Domain.Entities
@@ -10,7 +11,7 @@ namespace Wpm.Clinic.Domain.Entities
         public DateTimeRange When { get; private set; }
         public Text? Diagnosis { get; private set; }
         public Text? Treatment { get; private set; }
-        public PatiendId PatiendId { get; init; }
+        public PatiendId PatiendId { get; private set; }
         public Weight? CurrentWeight { get; private set; }
         public ConsultationStatus Status { get; private set; }
         public IReadOnlyCollection<DrugAdministration> AdministeredDrugs => administeredDrugs;
@@ -18,10 +19,9 @@ namespace Wpm.Clinic.Domain.Entities
 
         public Consultation(PatiendId patiendId)
         {
-            Id = Guid.NewGuid();
-            PatiendId = patiendId;
-            Status = ConsultationStatus.Open;
-            When = DateTime.UtcNow;
+            ApplyDomainEvent(new ConsultationStarted(Guid.NewGuid(),
+                                                     patiendId,
+                                                     DateTime.UtcNow));
         }
 
         public void RegisterVitalSigns(IEnumerable<VitalSigns> vitalSigns)
@@ -73,6 +73,19 @@ namespace Wpm.Clinic.Domain.Entities
             if (Status == ConsultationStatus.Closed)
             {
                 throw new InvalidOperationException("The consultation is already closed.");
+            }
+        }
+
+        protected override void ChangesStateByUsingDomainEvent(IDomainEvent domainEvent)
+        {
+           switch (domainEvent)
+            {
+                case ConsultationStarted e:
+                    Id = e.Id;
+                    PatiendId = e.PatientId;
+                    When = e.StartedAt;
+                    Status = ConsultationStatus.Open;
+                    break;
             }
         }
     }
