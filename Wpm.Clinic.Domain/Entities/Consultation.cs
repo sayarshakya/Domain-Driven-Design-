@@ -8,8 +8,6 @@ namespace Wpm.Clinic.Domain.Entities
         private readonly List<DrugAdministration> administeredDrugs = new();
         private readonly List<VitalSigns> vitalSignReadings = new();
         public DateTimeRange When { get; private set; }
-        public DateTime StartedAt { get; init; } 
-        public DateTime? EndedAt { get; private set; }
         public Text? Diagnosis { get; private set; }
         public Text? Treatment { get; private set; }
         public PatiendId PatiendId { get; init; }
@@ -23,7 +21,7 @@ namespace Wpm.Clinic.Domain.Entities
             Id = Guid.NewGuid();
             PatiendId = patiendId;
             Status = ConsultationStatus.Open;
-            StartedAt = DateTime.UtcNow;
+            When = DateTime.UtcNow;
         }
 
         public void RegisterVitalSigns(IEnumerable<VitalSigns> vitalSigns)
