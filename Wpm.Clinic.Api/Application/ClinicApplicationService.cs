@@ -1,4 +1,7 @@
-﻿using Wpm.Clinic.Api.Commands;
+﻿using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using Wpm.Clinic.Api.Commands;
 using Wpm.Clinic.Api.Infrastructure;
 using Wpm.Clinic.Domain;
 using Wpm.Clinic.Domain.Entities;
@@ -11,56 +14,81 @@ namespace Wpm.Clinic.Api.Application
         public async Task<Guid> Handle(StartConsultationCommand command)
         {
             var newConsultation = new Consultation(command.PatientId);
-            await dbContext.Consultations.AddAsync(newConsultation);
-            await dbContext.SaveChangesAsync();
+            await SaveAsync(newConsultation);
             return newConsultation.Id;
         }
 
         public async Task Handle(EndConsultationCommand command)
         {
             var consultation = await dbContext.Consultations.FindAsync(command.ConsultationId);
-            consultation.End();
+            //consultation.End();
             await dbContext.SaveChangesAsync();
         }
 
         public async Task Handle(SetDiagnosisCommand command)
         {
             var consultation = await dbContext.Consultations.FindAsync(command.ConsultationId);
-            consultation.SetDiagnosis(command.Diagnosis);
+            //consultation.SetDiagnosis(command.Diagnosis);
             await dbContext.SaveChangesAsync();
         }
 
         public async Task Handle(SetTreatmentCommand command)
         {
             var consultation = await dbContext.Consultations.FindAsync(command.ConsultationId);
-            consultation.SetTreatment(command.Treatment);
+            //consultation.SetTreatment(command.Treatment);
             await dbContext.SaveChangesAsync();
         }
 
         public async Task Handle(SetWeightCommand command)
         {
             var consultation = await dbContext.Consultations.FindAsync(command.ConsultationId);
-            consultation.SetWeight(command.Weight);
+            //consultation.SetWeight(command.Weight);
             await dbContext.SaveChangesAsync();
         }
 
         public async Task Handle(AdministerDrugCommand command)
         {
             var consultation = await dbContext.Consultations.FindAsync(command.ConsultationId);
-            consultation.AdministerDrug(command.DrugId,
-                            new Dose(command.Quantity, command.UnitOfMeasure));
+            //consultation.AdministerDrug(command.DrugId,
+            //                new Dose(command.Quantity, command.UnitOfMeasure));
             await dbContext.SaveChangesAsync();
         }
 
         public async Task Handle(RegisterVitalSignsCommand command)
         {
             var consultation = await dbContext.Consultations.FindAsync(command.ConsultationId);
-            consultation.RegisterVitalSigns(command.VitalSignReadings
-                                                   .Select(v => new VitalSigns(v.ReadingDateTime,
-                                                                               v.Temperature,
-                                                                               v.HeartRate,
-                                                                               v.RespiratoryRate)));
+            //consultation.RegisterVitalSigns(command.VitalSignReadings
+            //                                       .Select(v => new VitalSigns(v.ReadingDateTime,
+            //                                                                   v.Temperature,
+            //                                                                   v.HeartRate,
+            //                                                                   v.RespiratoryRate)));
             await dbContext.SaveChangesAsync();
+        }
+
+        public async Task SaveAsync(Consultation consultation)
+        {
+            var aggregateId = $"Consultation-{consultation.Id}";
+            var changes = consultation.GetChanges()
+                .Select(e => new ConsultationEventData(Guid.NewGuid(),
+                aggregateId,
+                e.GetType().Name,
+                JsonConvert.SerializeObject(e),
+                e.GetType().AssemblyQualifiedName
+                ));
+
+            if(!changes.Any())
+            {
+                return;
+            }
+
+            foreach (var change in changes)
+            {
+                await dbContext.Consultations.AddAsync(change);
+            }
+
+            await dbContext.SaveChangesAsync();
+            consultation.ClearChanges();
+
         }
     }
 }

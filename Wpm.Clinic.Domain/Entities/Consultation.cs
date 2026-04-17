@@ -26,13 +26,13 @@ namespace Wpm.Clinic.Domain.Entities
 
         public void RegisterVitalSigns(IEnumerable<VitalSigns> vitalSigns)
         {
-            ValidateConsulationStatus();
+            ValidateConsultationStatus();
             vitalSignReadings.AddRange(vitalSigns);
         }
 
         public void AdministerDrug(DrugId drugId, Dose dose)
         {
-            ValidateConsulationStatus();
+            ValidateConsultationStatus();
             var newDrugAdministration = new DrugAdministration(drugId, dose);
             administeredDrugs.Add(newDrugAdministration);
 
@@ -40,35 +40,25 @@ namespace Wpm.Clinic.Domain.Entities
 
         public void End()
         {
-            ValidateConsulationStatus();
-            if(Diagnosis == null || Treatment == null || CurrentWeight == null)
-            {
-                throw new InvalidOperationException("The consultation cannot be ended.");
-            }
-
-            Status = ConsultationStatus.Closed;
-            When = new DateTimeRange(When.StartedAt, DateTime.UtcNow);
+            ApplyDomainEvent(new ConsultationEnded(Id, DateTime.UtcNow));
         }
 
         public void SetWeight(Weight weight)
         {
-            ValidateConsulationStatus();
-            CurrentWeight = weight;
+            ApplyDomainEvent(new WeightUpdated(Id, weight));
         }
 
         public void SetDiagnosis(Text diagnosis)
         {
-            ValidateConsulationStatus();
-            Diagnosis = diagnosis;
+           ApplyDomainEvent(new DiagnosisUpdated(Id, diagnosis));
         }
 
         public void SetTreatment(Text treatment)
         {
-            ValidateConsulationStatus();
-            Treatment = treatment;
+            ApplyDomainEvent(new TreatmentUpdated(Id, treatment));
         }
 
-        private void ValidateConsulationStatus()
+        private void ValidateConsultationStatus()
         {
             if (Status == ConsultationStatus.Closed)
             {
@@ -85,6 +75,27 @@ namespace Wpm.Clinic.Domain.Entities
                     PatiendId = e.PatientId;
                     When = e.StartedAt;
                     Status = ConsultationStatus.Open;
+                    break;
+                case DiagnosisUpdated e:
+                    ValidateConsultationStatus();
+                    Diagnosis = e.Diagnosis;
+                    break;
+                case TreatmentUpdated e:
+                    ValidateConsultationStatus();
+                    Treatment = e.Treatment;
+                    break;
+                case WeightUpdated e:
+                    ValidateConsultationStatus();
+                    CurrentWeight = e.Weight;
+                    break;
+                case ConsultationEnded e:
+                    ValidateConsultationStatus();
+                    if (Diagnosis == null || Treatment == null || CurrentWeight == null)
+                    {
+                        throw new InvalidOperationException("The consultation cannot be ended.");
+                    }
+                    Status = ConsultationStatus.Closed;
+                    When = new DateTimeRange(When.StartedAt, DateTime.UtcNow);
                     break;
             }
         }
