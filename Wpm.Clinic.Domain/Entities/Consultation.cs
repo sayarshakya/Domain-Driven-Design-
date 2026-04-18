@@ -24,6 +24,11 @@ namespace Wpm.Clinic.Domain.Entities
                                                      DateTime.UtcNow));
         }
 
+        public Consultation(IEnumerable<IDomainEvent> domainEvents)
+        {
+            Load(domainEvents);
+        }
+
         public void RegisterVitalSigns(IEnumerable<VitalSigns> vitalSigns)
         {
             ValidateConsultationStatus();
