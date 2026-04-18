@@ -1,5 +1,4 @@
-﻿
-using Wpm.Management.Domain.Events;
+﻿using Wpm.Management.Domain.Events;
 using Wpm.Management.Domain.ValueObjects;
 using Wpm.SharedKernel;
 

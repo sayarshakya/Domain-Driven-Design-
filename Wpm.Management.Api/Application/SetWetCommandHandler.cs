@@ -1,5 +1,4 @@
 ﻿
-using Microsoft.EntityFrameworkCore;
 using Wpm.Management.Api.Infrastructure;
 using Wpm.Management.Domain;
 using Wpm.Management.Domain.Events;

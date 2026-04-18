@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Text.Json.Serialization;
 using Wpm.Clinic.Api.Commands;
 using Wpm.Clinic.Api.Infrastructure;
-using Wpm.Clinic.Domain;
 using Wpm.Clinic.Domain.Entities;
-using Wpm.Clinic.Domain.ValueObjects;
 using Wpm.SharedKernel;
 
 namespace Wpm.Clinic.Api.Application
